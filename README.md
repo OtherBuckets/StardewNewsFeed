@@ -6,13 +6,13 @@ This Stardew Valley Mod inspects various locations every morning for harvestable
 ## Nexus Mods Page
 https://www.nexusmods.com/stardewvalley/mods/3206/
 
-## Currently Supported Locations
-* Farm Cave
-* Greenhouse
+## Currently Supported Locations (1.0)
+* Farm Cave Notifications
+* Greenhouse Notifications
 
-## Upcoming Locations
-* Cellar
-* Barns
+## Completed Features To Go live with next release (1.1)
+* Cellar Notifications
+* Shed Notifications
 
 ## How to configure this mod
 The install directory for this mod will contain a configuration file. ~/Stardew Valley/Contents/Mods/StardewNewsFeed/config.json
@@ -23,10 +23,9 @@ By default, scanning for items in the Farm Cave and the Greenhouse will be turne
 |-|-|-|
 |DebugMode|Prints debug info to the console|false|
 |GreenhouseNotificationsEnabled|Enables/Disables scanning and notifications for the greenhouse|true|
-|GreenhouseDirtOnlyMode|Not yet implemented, will be a performance option|false|
 |CaveNotifications|Enables/Disables scanning and notifications for the farm cave|true|
-|CaveMushroomMode|Setting this to true will only scan the 6 mushroom boxes instead of scanning the entire cave. Will improve performance.|false|
-|CellarNotificationsEnabled|The Cellar is still a work in progress, so this does nothing|false|
+|CellarNotificationsEnabled|Enables/Disables scanning and notifications for the cellar|false|
+|ShedNotificationsEnabled|Enables/Disabled scanning and notifications for sheds|false|
 
 ## Plans for additional future updates
 Notifications for npc birthdays
