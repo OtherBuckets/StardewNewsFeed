@@ -16,14 +16,14 @@ The install directory for this mod will contain a configuration file. ~/Stardew 
 
 By default, scanning for items in the Farm Cave and the Greenhouse will be turned on. The game will need to be restarted after making adjustments to the configuration.
 
-|Config Property|Description|
-|-|-|
-|DebugMode|Debug mode|
-|GreenhouseNotificationsEnabled|Enables/Disables scanning and notifications for the greenhouse|
-|GreenhouseDirtOnlyMode|Not yet implemented, will be a performance option|
-|CaveNotifications|Enables/Disables scanning and notifications for the farm cave|
-|CaveMushroomMode|Setting this to true will only scan the 6 mushroom boxes instead of scanning the entire cave. Will improve performance.|
-|CellarNotificationsEnabled|The Cellar is still a work in progress, so this does nothing|
+|Config Property|Description|Default Value|
+|-|-|-|
+|DebugMode|Prints debug info to the console|false|
+|GreenhouseNotificationsEnabled|Enables/Disables scanning and notifications for the greenhouse|true|
+|GreenhouseDirtOnlyMode|Not yet implemented, will be a performance option|false|
+|CaveNotifications|Enables/Disables scanning and notifications for the farm cave|true|
+|CaveMushroomMode|Setting this to true will only scan the 6 mushroom boxes instead of scanning the entire cave. Will improve performance.|false|
+|CellarNotificationsEnabled|The Cellar is still a work in progress, so this does nothing|false|
 
 ## Plans for additional future updates
 Notifications for npc birthdays
