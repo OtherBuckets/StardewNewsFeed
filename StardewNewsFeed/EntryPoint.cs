@@ -27,6 +27,10 @@ namespace StardewNewsFeed {
             if(_modConfig.CellarNotificationsEnabled) {
                 helper.Events.GameLoop.DayStarted += CheckCellar;
             }
+
+            if(_modConfig.ShedNotificationsEnabled) {
+                helper.Events.GameLoop.DayStarted += CheckSheds;
+            }
         }
         #endregion
 
@@ -50,6 +54,17 @@ namespace StardewNewsFeed {
         private void CheckCellar(object sender, DayStartedEventArgs e) {
             var cellar = Game1.getLocationFromName(CELLAR_LOCATION_NAME);
             CheckLocationForHarvestableItems(cellar);
+        }
+
+        private void CheckSheds(object sender, DayStartedEventArgs e) {
+            var sheds = Game1.getFarm()
+                .buildings
+                .Select(b => b.indoors.Value)
+                .Where(i => i is Shed);
+
+            foreach(var shed in sheds) {
+                CheckLocationForHarvestableItems(shed);
+            }
         }
 
         private void CheckLocationForHarvestableItems(GameLocation location) {
