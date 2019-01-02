@@ -3,6 +3,9 @@ Morning Notifications for Stardew Valley
 
 This Stardew Valley Mod inspects various locations every morning for harvestable items. Any locations with harvestable items found will generate a notification to the player.
 
+## Nexus Mods Page
+https://www.nexusmods.com/stardewvalley/mods/3206/
+
 ## Currently Supported Locations
 * Farm Cave
 * Greenhouse
