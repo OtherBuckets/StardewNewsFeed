@@ -6,11 +6,9 @@ This Stardew Valley Mod inspects various locations every morning for harvestable
 ## Nexus Mods Page
 https://www.nexusmods.com/stardewvalley/mods/3206/
 
-## Currently Supported Locations (1.0)
+## Currently Supported Locations (1.1)
 * Farm Cave Notifications
 * Greenhouse Notifications
-
-## Completed Features To Go live with next release (1.1)
 * Cellar Notifications
 * Shed Notifications
 
