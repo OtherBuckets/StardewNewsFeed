@@ -5,10 +5,10 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("StardewNewsFeed")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Stardew Valley Morning Notifications Mod")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
+[assembly: AssemblyCompany("Other Buckets")]
+[assembly: AssemblyProduct("StardewNewsFeed")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

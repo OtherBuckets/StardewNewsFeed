@@ -23,6 +23,8 @@ namespace StardewNewsFeed {
             if(_modConfig.GreenhouseNotificationsEnabled) {
                 helper.Events.GameLoop.DayStarted += CheckGreenhouse;
             }
+
+            // TODO: Celler
         }
         #endregion
 
