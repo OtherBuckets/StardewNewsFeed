@@ -9,6 +9,7 @@ namespace StardewNewsFeed {
         #region Private Properties
         private ModConfig _modConfig;
         private const string FARM_CAVE_LOCATION_NAME = "FarmCave";
+        private const string CELLAR_LOCATION_NAME = "Cellar";
         #endregion
 
         #region StardewModdingApi.Mod Overrides
@@ -23,7 +24,9 @@ namespace StardewNewsFeed {
                 helper.Events.GameLoop.DayStarted += CheckGreenhouse;
             }
 
-            // TODO: Celler
+            if(_modConfig.CellarNotificationsEnabled) {
+                helper.Events.GameLoop.DayStarted += CheckCellar;
+            }
         }
         #endregion
 
@@ -42,6 +45,11 @@ namespace StardewNewsFeed {
         private void CheckGreenhouse(object sender, DayStartedEventArgs e) {
             var greenhouse = Game1.locations.SingleOrDefault(l => l.isGreenhouse);
             CheckLocationForHarvestableItems(greenhouse);
+        }
+
+        private void CheckCellar(object sender, DayStartedEventArgs e) {
+            var cellar = Game1.getLocationFromName(CELLAR_LOCATION_NAME);
+            CheckLocationForHarvestableItems(cellar);
         }
 
         private void CheckLocationForHarvestableItems(GameLocation location) {
