@@ -50,7 +50,7 @@ namespace StardewNewsFeed {
                 };
                 foreach (var location in mushroomBoxLocations) {
                     if (TileIsHarvestable(farmCave, location[0], location[1])) {
-                        Game1.addHUDMessage(new HUDMessage("The Cave has items today!", 2));
+                        Game1.addHUDMessage(new HUDMessage("The Farm Cave has items today!", 2));
                         return;
                     }
                 }
@@ -59,7 +59,7 @@ namespace StardewNewsFeed {
                 for (int height = 4; height < 9; height++) {
                     for (int width = 2; width < 11; width++) {
                         if (TileIsHarvestable(farmCave, height, width)) {
-                            Game1.addHUDMessage(new HUDMessage("The Cave has items today!", 2));
+                            Game1.addHUDMessage(new HUDMessage("The Farm Cave has items today!", 2));
                             return;
                         }
                     }
