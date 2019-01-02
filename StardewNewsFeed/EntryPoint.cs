@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -17,6 +18,10 @@ namespace StardewNewsFeed {
 
             if(_modConfig.CaveNotificationsEnabled) {
                 helper.Events.GameLoop.DayStarted += CheckFarmCave;
+            }
+
+            if(_modConfig.GreenhouseNotificationsEnabled) {
+                helper.Events.GameLoop.DayStarted += CheckGreenhouse;
             }
         }
         #endregion
@@ -59,6 +64,20 @@ namespace StardewNewsFeed {
                 }
             }
             Log("No items found in the farm cave");
+        }
+
+        private void CheckGreenhouse(object sender, DayStartedEventArgs e) {
+            var greenhouse = Game1.locations.SingleOrDefault(l => l.isGreenhouse);
+            // TODO Handle Dirt Only Mode for efficiency
+            for (int height = 0; height <= 20; height++) {
+                for (int width = 0; width <= 20; width++) {
+                    if (TileIsHarvestable(greenhouse, height, width)) {
+                        Game1.addHUDMessage(new HUDMessage("The Greenhouse has items today!", 2));
+                        return;
+                    }
+                }
+            }
+            Log("No items found in the greenhouse");
         }
 
         private bool TileIsHarvestable(GameLocation location, int height, int width) {
