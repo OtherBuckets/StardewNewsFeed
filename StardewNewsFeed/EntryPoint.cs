@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -37,58 +36,23 @@ namespace StardewNewsFeed {
 
         private void CheckFarmCave(object sender, DayStartedEventArgs e) {
             var farmCave = Game1.getLocationFromName(FARM_CAVE_LOCATION_NAME);
-
-            if(_modConfig.CaveMushroomMode) {
-                // In mushroom mode, we only need to check the 6 boxes
-                var mushroomBoxLocations = new List<int[]> {
-                    new [] {4,5},
-                    new [] {4,7},
-                    new [] {4,9},
-                    new [] {6,5},
-                    new [] {6,7},
-                    new [] {6,9}
-                };
-                foreach (var location in mushroomBoxLocations) {
-                    if (TileIsHarvestable(farmCave, location[0], location[1])) {
-                        Game1.addHUDMessage(new HUDMessage("The Farm Cave has items today!", 2));
-                        return;
-                    }
-                }
-            } else {
-                // not in mushroom mode, so check all usable tiles, 4-8 and 2-10 are an educated guess
-                for (int height = 4; height < 9; height++) {
-                    for (int width = 2; width < 11; width++) {
-                        if (TileIsHarvestable(farmCave, height, width)) {
-                            Game1.addHUDMessage(new HUDMessage("The Farm Cave has items today!", 2));
-                            return;
-                        }
-                    }
-                }
-            }
-            Log("No items found in the farm cave");
+            CheckLocationForHarvestableItems(farmCave);
         }
 
         private void CheckGreenhouse(object sender, DayStartedEventArgs e) {
             var greenhouse = Game1.locations.SingleOrDefault(l => l.isGreenhouse);
-            // TODO Handle Dirt Only Mode for efficiency
-            for (int height = 0; height <= 20; height++) {
-                for (int width = 0; width <= 20; width++) {
-                    if (TileIsHarvestable(greenhouse, height, width)) {
-                        Game1.addHUDMessage(new HUDMessage("The Greenhouse has items today!", 2));
-                        return;
-                    }
-                }
-            }
-            Log("No items found in the greenhouse");
+            CheckLocationForHarvestableItems(greenhouse);
         }
 
-        private bool TileIsHarvestable(GameLocation location, int height, int width) {
-            var tile = location.getObjectAtTile(height, width);
-            if (tile == null) {
-                return false;
-            }
+        private void CheckLocationForHarvestableItems(GameLocation location) {
+            var itemsReadyForHarvest = location.Objects.Values.Where(o => o.readyForHarvest);
 
-            return tile.readyForHarvest;
+            if (itemsReadyForHarvest.Any()) {
+                Game1.addHUDMessage(new HUDMessage($"There are {itemsReadyForHarvest.Count()} items ready for harvesting in the {location.Name}", 2));
+                Log($"{itemsReadyForHarvest.Count()} items found in the {location.Name}");
+            } else {
+                Log($"No items found in the {location.Name}");
+            }
         }
         #endregion
 
