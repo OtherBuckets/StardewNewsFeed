@@ -10,5 +10,11 @@ namespace StardewNewsFeed {
             _modConfig = Helper.ReadConfig<ModConfig>();
         }
 
+        private void Log(string message) {
+            if(_modConfig.DebugMode) {
+                Monitor.Log(message);
+            }
+        }
+
     }
 }
