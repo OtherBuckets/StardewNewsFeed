@@ -50,7 +50,7 @@ namespace StardewNewsFeed {
 
         private void CheckGreenhouse(object sender, DayStartedEventArgs e) {
             var greenhouse = Game1.locations.SingleOrDefault(l => l.isGreenhouse);
-            CheckLocationForHarvestableObjects(greenhouse);
+            CheckLocationForHarvestableTerrain(greenhouse);
         }
 
         private void CheckCellar(object sender, DayStartedEventArgs e) {
