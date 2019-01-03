@@ -1,7 +1,9 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.TerrainFeatures;
 
 namespace StardewNewsFeed {
     public class EntryPoint : Mod {
@@ -43,17 +45,17 @@ namespace StardewNewsFeed {
 
         private void CheckFarmCave(object sender, DayStartedEventArgs e) {
             var farmCave = Game1.getLocationFromName(FARM_CAVE_LOCATION_NAME);
-            CheckLocationForHarvestableItems(farmCave);
+            CheckLocationForHarvestableObjects(farmCave);
         }
 
         private void CheckGreenhouse(object sender, DayStartedEventArgs e) {
             var greenhouse = Game1.locations.SingleOrDefault(l => l.isGreenhouse);
-            CheckLocationForHarvestableItems(greenhouse);
+            CheckLocationForHarvestableObjects(greenhouse);
         }
 
         private void CheckCellar(object sender, DayStartedEventArgs e) {
             var cellar = Game1.getLocationFromName(CELLAR_LOCATION_NAME);
-            CheckLocationForHarvestableItems(cellar);
+            CheckLocationForHarvestableObjects(cellar);
         }
 
         private void CheckSheds(object sender, DayStartedEventArgs e) {
@@ -63,11 +65,11 @@ namespace StardewNewsFeed {
                 .Where(i => i is Shed);
 
             foreach(var shed in sheds) {
-                CheckLocationForHarvestableItems(shed);
+                CheckLocationForHarvestableObjects(shed);
             }
         }
 
-        private void CheckLocationForHarvestableItems(GameLocation location) {
+        private void CheckLocationForHarvestableObjects(GameLocation location) {
             var itemsReadyForHarvest = location.Objects.Values.Where(o => o.readyForHarvest);
 
             if (itemsReadyForHarvest.Any()) {
@@ -75,6 +77,15 @@ namespace StardewNewsFeed {
                 Log($"{itemsReadyForHarvest.Count()} items found in the {location.Name}");
             } else {
                 Log($"No items found in the {location.Name}");
+            }
+        }
+
+        private void CheckLocationForHarvestableTerrain(GameLocation location) {
+            var hoeDirtReadyForHavest = location.terrainFeatures.Pairs.Select(p => p.Value as HoeDirt).Where(hd => hd.readyForHarvest());
+            if(hoeDirtReadyForHavest.Any()) {
+                Game1.addHUDMessage(new HUDMessage($"There are {hoeDirtReadyForHavest.Count()} items ready for harvest in the {location.name}."));
+            } else {
+                Log($"No items found in the {location.name}");
             }
         }
         #endregion
