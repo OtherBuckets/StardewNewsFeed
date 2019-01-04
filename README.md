@@ -16,7 +16,7 @@ https://www.nexusmods.com/stardewvalley/mods/3206/
 As you move around the world. Each time you move to a new location, it will check all NPC's in your new location for birthdays, and display a notification if one is found.
 
 ## How to configure this mod
-The install directory for this mod will contain a configuration file. ~/Stardew Valley/Contents/Mods/StardewNewsFeed/config.json
+The install directory for this mod will contain a configuration file. ~/Mods/StardewNewsFeed/config.json
 
 By default, scanning for items in the Farm Cave and the Greenhouse will be turned on. The game will need to be restarted after making adjustments to the configuration.
 
