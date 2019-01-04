@@ -52,7 +52,12 @@ namespace StardewNewsFeed {
 
         private void CheckFarmCave(object sender, DayStartedEventArgs e) {
             var farmCave = Game1.getLocationFromName(FARM_CAVE_LOCATION_NAME);
-            CheckLocationForHarvestableObjects(farmCave);
+            //if(Game1.player.caveChoice == 1) {
+                CheckLocationForHarvestableObjects(farmCave);
+            //} else {
+                //ScanLocationForFruit(farmCave);
+            //}
+
         }
 
         private void CheckGreenhouse(object sender, DayStartedEventArgs e) {
@@ -117,6 +122,7 @@ namespace StardewNewsFeed {
 
         private void CheckLocationForHarvestableTerrain(GameLocation location) {
             var hoeDirtReadyForHavest = location.terrainFeatures.Pairs
+                .Where(p => p.Value is HoeDirt)
                 .Select(p => p.Value as HoeDirt)
                 .Where(hd => hd.readyForHarvest());
 
@@ -125,6 +131,10 @@ namespace StardewNewsFeed {
             } else {
                 Log($"No items found in the {location.name}");
             }
+        }
+
+        private void ScanLocationForFruit(GameLocation location) {
+
         }
         #endregion
 
