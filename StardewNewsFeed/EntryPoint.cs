@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -52,11 +52,12 @@ namespace StardewNewsFeed {
 
         private void CheckFarmCave(object sender, DayStartedEventArgs e) {
             var farmCave = Game1.getLocationFromName(FARM_CAVE_LOCATION_NAME);
-            //if(Game1.player.caveChoice == 1) {
+            Log($"Player Cave Choice: {Game1.player.caveChoice}");
+            if(Game1.player.caveChoice == 2) {
                 CheckLocationForHarvestableObjects(farmCave);
-            //} else {
-                //ScanLocationForFruit(farmCave);
-            //}
+            } else {
+                ScanLocationForFruit(farmCave);
+            }
 
         }
 
@@ -134,7 +135,23 @@ namespace StardewNewsFeed {
         }
 
         private void ScanLocationForFruit(GameLocation location) {
+            for (int height = 4; height < 9; height++) {
+                for (int width = 2; width < 11; width++) {
+                    if (TileIsHarvestable(location, height, width)) {
+                        Game1.addHUDMessage(new HUDMessage("The Cave has items today!", 2));
+                        return;
+                    }
+                }
+            }
+        }
 
+        private bool TileIsHarvestable(GameLocation location, int height, int width) {
+            var tile = location.getObjectAtTile(height, width);
+            if (tile == null) {
+                return false;
+            }
+
+            return tile.readyForHarvest;
         }
         #endregion
 
