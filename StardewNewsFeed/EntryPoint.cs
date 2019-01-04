@@ -12,11 +12,13 @@ namespace StardewNewsFeed {
         private ModConfig _modConfig;
         private const string FARM_CAVE_LOCATION_NAME = "FarmCave";
         private const string CELLAR_LOCATION_NAME = "Cellar";
+        private List<NPC> _nearbyNpcsWithBirthdays;
         #endregion
 
         #region StardewModdingApi.Mod Overrides
         public override void Entry(IModHelper helper) {
             _modConfig = Helper.ReadConfig<ModConfig>();
+            _nearbyNpcsWithBirthdays = new List<NPC>();
 
             if(_modConfig.CaveNotificationsEnabled) {
                 helper.Events.GameLoop.DayStarted += CheckFarmCave;
@@ -32,6 +34,11 @@ namespace StardewNewsFeed {
 
             if(_modConfig.ShedNotificationsEnabled) {
                 helper.Events.GameLoop.DayStarted += CheckSheds;
+            }
+
+            if(_modConfig.BirthdayCheckEnabled) {
+                helper.Events.World.NpcListChanged += CheckBirthdaysOnNpcChanged;
+                helper.Events.Player.Warped += OnLocationChanged;
             }
         }
         #endregion
@@ -69,6 +76,34 @@ namespace StardewNewsFeed {
             }
         }
 
+        private void CheckBirthdaysOnNpcChanged(object sender, NpcListChangedEventArgs e) {
+            foreach(var npc in e.Added) {
+                if(npc.isBirthday(Game1.Date.Season, Game1.Date.DayOfMonth)) {
+                    NearbyBirthdayFound(npc);
+                }
+            }
+            foreach(var npc in e.Removed) {
+                if(_nearbyNpcsWithBirthdays.Contains(npc)) {
+                    Game1.addHUDMessage(new HUDMessage($"{npc.getName()} has left the area.", 2));
+                    _nearbyNpcsWithBirthdays.Remove(npc);
+                }
+            }
+        }
+
+        private void OnLocationChanged(object sender, WarpedEventArgs e) {
+            _nearbyNpcsWithBirthdays.Clear();
+            foreach(var npc in e.NewLocation.getCharacters()) {
+                if(npc.isBirthday(Game1.Date.Season, Game1.Date.DayOfMonth)) {
+                    NearbyBirthdayFound(npc);
+                }
+            }
+        }
+
+        private void NearbyBirthdayFound(NPC npc) {
+            Game1.addHUDMessage(new HUDMessage($"Today is {npc.getName()}'s birthday. You should give them a gift while they are close.", 2));
+            _nearbyNpcsWithBirthdays.Add(npc);
+        }
+
         private void CheckLocationForHarvestableObjects(GameLocation location) {
             var itemsReadyForHarvest = location.Objects.Values.Where(o => o.readyForHarvest);
 
@@ -81,7 +116,10 @@ namespace StardewNewsFeed {
         }
 
         private void CheckLocationForHarvestableTerrain(GameLocation location) {
-            var hoeDirtReadyForHavest = location.terrainFeatures.Pairs.Select(p => p.Value as HoeDirt).Where(hd => hd.readyForHarvest());
+            var hoeDirtReadyForHavest = location.terrainFeatures.Pairs
+                .Select(p => p.Value as HoeDirt)
+                .Where(hd => hd.readyForHarvest());
+
             if(hoeDirtReadyForHavest.Any()) {
                 Game1.addHUDMessage(new HUDMessage($"There are {hoeDirtReadyForHavest.Count()} items ready for harvest in the {location.name}."));
             } else {
