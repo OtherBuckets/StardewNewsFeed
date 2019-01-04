@@ -24,7 +24,7 @@ By default, scanning for items in the Farm Cave and the Greenhouse will be turne
 |-|-|-|
 |DebugMode|Prints debug info to the console|false|
 |GreenhouseNotificationsEnabled|Enables/Disables scanning and notifications for the greenhouse|true|
-|CaveNotifications|Enables/Disables scanning and notifications for the farm cave|true|
+|CaveNotificationsEnabled|Enables/Disables scanning and notifications for the farm cave|true|
 |CellarNotificationsEnabled|Enables/Disables scanning and notifications for the cellar|false|
 |ShedNotificationsEnabled|Enables/Disabled scanning and notifications for sheds|false|
 |BirthdayCheckEnabled|Enables/Disables roaming birthday checks|false|
