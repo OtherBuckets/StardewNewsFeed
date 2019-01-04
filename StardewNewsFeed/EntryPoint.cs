@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Collections.Generic;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -10,8 +9,6 @@ namespace StardewNewsFeed {
 
         #region Private Properties
         private ModConfig _modConfig;
-        private const string FARM_CAVE_LOCATION_NAME = "FarmCave";
-        private const string CELLAR_LOCATION_NAME = "Cellar";
         #endregion
 
         #region StardewModdingApi.Mod Overrides
@@ -35,7 +32,7 @@ namespace StardewNewsFeed {
             }
 
             if (_modConfig.BirthdayCheckEnabled) {
-                helper.Events.GameLoop.DayStarted += CheckBirthdays;
+                helper.Events.Player.Warped += CheckBirthdays;
             }
         }
         #endregion
@@ -48,7 +45,7 @@ namespace StardewNewsFeed {
         }
 
         private void CheckFarmCave(object sender, DayStartedEventArgs e) {
-            var farmCave = Game1.getLocationFromName(FARM_CAVE_LOCATION_NAME);
+            var farmCave = Game1.getLocationFromName(Constants.FARM_CAVE_LOCATION_NAME);
             Log($"Player Cave Choice: {Game1.player.caveChoice}");
             if(Game1.player.caveChoice == 2) {
                 CheckLocationForHarvestableObjects(farmCave);
@@ -64,7 +61,7 @@ namespace StardewNewsFeed {
         }
 
         private void CheckCellar(object sender, DayStartedEventArgs e) {
-            var cellar = Game1.getLocationFromName(CELLAR_LOCATION_NAME);
+            var cellar = Game1.getLocationFromName(Constants.CELLAR_LOCATION_NAME);
             CheckLocationForHarvestableObjects(cellar);
         }
 
@@ -79,8 +76,9 @@ namespace StardewNewsFeed {
             }
         }
 
-        private void CheckBirthdays(object sender, DayStartedEventArgs e) {
-            foreach (var npc in Game1.currentLocation.getCharacters()) {
+        private void CheckBirthdays(object sender, WarpedEventArgs e) {
+            Log("Checking for birthdays: ");
+            foreach(var npc in e.NewLocation.getCharacters()) {
                 Log($"Checking {npc.displayName} for a birthday today");
                 if (npc.isBirthday(Game1.Date.Season, Game1.Date.DayOfMonth)) {
                     Game1.addHUDMessage(new HUDMessage($"Today is {npc.getName()}'s birthday. Don't forget to give them a gift", 2));
@@ -92,10 +90,10 @@ namespace StardewNewsFeed {
             var itemsReadyForHarvest = location.Objects.Values.Where(o => o.readyForHarvest);
 
             if (itemsReadyForHarvest.Any()) {
-                Game1.addHUDMessage(new HUDMessage($"There are {itemsReadyForHarvest.Count()} items ready for harvesting in the {location.Name}", 2));
-                Log($"{itemsReadyForHarvest.Count()} items found in the {location.Name}");
+                Game1.addHUDMessage(new HUDMessage($"There are {itemsReadyForHarvest.Count()} items ready for harvesting in the {location.getDisplayName()}", 2));
+                Log($"{itemsReadyForHarvest.Count()} items found in the {location.getDisplayName()}");
             } else {
-                Log($"No items found in the {location.Name}");
+                Log($"No items found in the {location.getDisplayName()}");
             }
         }
 
@@ -106,9 +104,9 @@ namespace StardewNewsFeed {
                 .Where(hd => hd.readyForHarvest());
 
             if(hoeDirtReadyForHavest.Any()) {
-                Game1.addHUDMessage(new HUDMessage($"There are {hoeDirtReadyForHavest.Count()} items ready for harvest in the {location.name}."));
+                Game1.addHUDMessage(new HUDMessage($"There are {hoeDirtReadyForHavest.Count()} items ready for harvest in the {location.getDisplayName()}."));
             } else {
-                Log($"No items found in the {location.name}");
+                Log($"No items found in the {location.getDisplayName()}");
             }
         }
 
@@ -116,7 +114,7 @@ namespace StardewNewsFeed {
             for (int height = 4; height < 9; height++) {
                 for (int width = 2; width < 11; width++) {
                     if (TileIsHarvestable(location, height, width)) {
-                        Game1.addHUDMessage(new HUDMessage("The Cave has items today!", 2));
+                        Game1.addHUDMessage(new HUDMessage("The bats have brought you some fruit!", 2));
                         return;
                     }
                 }
