@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -12,13 +12,11 @@ namespace StardewNewsFeed {
         private ModConfig _modConfig;
         private const string FARM_CAVE_LOCATION_NAME = "FarmCave";
         private const string CELLAR_LOCATION_NAME = "Cellar";
-        private List<NPC> _nearbyNpcsWithBirthdays;
         #endregion
 
         #region StardewModdingApi.Mod Overrides
         public override void Entry(IModHelper helper) {
             _modConfig = Helper.ReadConfig<ModConfig>();
-            _nearbyNpcsWithBirthdays = new List<NPC>();
 
             if(_modConfig.CaveNotificationsEnabled) {
                 helper.Events.GameLoop.DayStarted += CheckFarmCave;
@@ -36,9 +34,8 @@ namespace StardewNewsFeed {
                 helper.Events.GameLoop.DayStarted += CheckSheds;
             }
 
-            if(_modConfig.BirthdayCheckEnabled) {
-                helper.Events.World.NpcListChanged += CheckBirthdaysOnNpcChanged;
-                helper.Events.Player.Warped += OnLocationChanged;
+            if (_modConfig.BirthdayCheckEnabled) {
+                helper.Events.GameLoop.DayStarted += CheckBirthdays;
             }
         }
         #endregion
@@ -82,32 +79,13 @@ namespace StardewNewsFeed {
             }
         }
 
-        private void CheckBirthdaysOnNpcChanged(object sender, NpcListChangedEventArgs e) {
-            foreach(var npc in e.Added) {
-                if(npc.isBirthday(Game1.Date.Season, Game1.Date.DayOfMonth)) {
-                    NearbyBirthdayFound(npc);
+        private void CheckBirthdays(object sender, DayStartedEventArgs e) {
+            foreach (var npc in Game1.currentLocation.getCharacters()) {
+                Log($"Checking {npc.displayName} for a birthday today");
+                if (npc.isBirthday(Game1.Date.Season, Game1.Date.DayOfMonth)) {
+                    Game1.addHUDMessage(new HUDMessage($"Today is {npc.getName()}'s birthday. Don't forget to give them a gift", 2));
                 }
             }
-            foreach(var npc in e.Removed) {
-                if(_nearbyNpcsWithBirthdays.Contains(npc)) {
-                    Game1.addHUDMessage(new HUDMessage($"{npc.getName()} has left the area.", 2));
-                    _nearbyNpcsWithBirthdays.Remove(npc);
-                }
-            }
-        }
-
-        private void OnLocationChanged(object sender, WarpedEventArgs e) {
-            _nearbyNpcsWithBirthdays.Clear();
-            foreach(var npc in e.NewLocation.getCharacters()) {
-                if(npc.isBirthday(Game1.Date.Season, Game1.Date.DayOfMonth)) {
-                    NearbyBirthdayFound(npc);
-                }
-            }
-        }
-
-        private void NearbyBirthdayFound(NPC npc) {
-            Game1.addHUDMessage(new HUDMessage($"Today is {npc.getName()}'s birthday. You should give them a gift while they are close.", 2));
-            _nearbyNpcsWithBirthdays.Add(npc);
         }
 
         private void CheckLocationForHarvestableObjects(GameLocation location) {
