@@ -3,6 +3,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using System.Collections.Generic;
 
 namespace StardewNewsFeed {
     public class EntryPoint : Mod {
@@ -50,7 +51,8 @@ namespace StardewNewsFeed {
             if(Game1.player.caveChoice == 2) {
                 CheckLocationForHarvestableObjects(farmCave);
             } else {
-                ScanLocationForFruit(farmCave);
+                //ScanLocationForFruit(farmCave);
+                CheckLocationForHarvestableObjects(farmCave);
             }
 
         }
@@ -90,8 +92,8 @@ namespace StardewNewsFeed {
             var itemsReadyForHarvest = location.Objects.Values.Where(o => o.readyForHarvest);
 
             if (itemsReadyForHarvest.Any()) {
-                Game1.addHUDMessage(new HUDMessage($"There are {itemsReadyForHarvest.Count()} items ready for harvesting in the {location.getDisplayName()}", 2));
-                Log($"{itemsReadyForHarvest.Count()} items found in the {location.getDisplayName()}");
+                Game1.addHUDMessage(new HUDMessage($"{itemsReadyForHarvest.Count()} item(s) ready for harvesting in the {location.getDisplayName()}", 2));
+                Log($"{itemsReadyForHarvest.Count()} item(s) found in the {location.getDisplayName()}");
             } else {
                 Log($"No items found in the {location.getDisplayName()}");
             }
@@ -104,31 +106,26 @@ namespace StardewNewsFeed {
                 .Where(hd => hd.readyForHarvest());
 
             if(hoeDirtReadyForHavest.Any()) {
-                Game1.addHUDMessage(new HUDMessage($"There are {hoeDirtReadyForHavest.Count()} items ready for harvest in the {location.getDisplayName()}."));
+                Game1.addHUDMessage(new HUDMessage($"{hoeDirtReadyForHavest.Count()} item(s) ready for harvest in the {location.getDisplayName()}."));
             } else {
                 Log($"No items found in the {location.getDisplayName()}");
             }
         }
 
-        private void ScanLocationForFruit(GameLocation location) {
-            for (int height = 4; height < 9; height++) {
-                for (int width = 2; width < 11; width++) {
-                    if (TileIsHarvestable(location, height, width)) {
-                        Game1.addHUDMessage(new HUDMessage("The bats have brought you some fruit!", 2));
-                        return;
-                    }
-                }
-            }
-        }
-
-        private bool TileIsHarvestable(GameLocation location, int height, int width) {
-            var tile = location.getObjectAtTile(height, width);
-            if (tile == null) {
-                return false;
-            }
-
-            return tile.readyForHarvest;
-        }
+        //private void ScanLocationForFruit(GameLocation location) {
+        //    var tiles = new List<Object>();
+        //    for (int height = 4; height < 9; height++) {
+        //        for (int width = 2; width < 11; width++) {
+        //            if (location.tileIsReadyForHarvest(height, width)) {
+        //                tiles.Add(location.getObjectAtTile(height, width));
+        //            }
+        //        }
+        //    }
+        //    if(tiles.Any()) {
+        //        Game1.addHUDMessage(new HUDMessage($"The bats have brought you {tiles.Count()} pieces of fruit!", 2));
+        //        return;
+        //    }
+        //}
         #endregion
 
     }
