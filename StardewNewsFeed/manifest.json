@@ -1,7 +1,7 @@
 ﻿{
   "Name": "StardewNewsFeed",
   "Author": "Other Buckets",
-  "Version": "1.3",
+  "Version": "1.4",
   "Description": "Provides useful notifications to the player every morning.",
   "UniqueID": "OtherBuckets.StardewNewsFeed",
   "EntryDll": "StardewNewsFeed.dll",
