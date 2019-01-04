@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System.Linq;
+using Netcode;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -47,7 +48,7 @@ namespace StardewNewsFeed {
         private void CheckFarmCave(object sender, DayStartedEventArgs e) {
             var farmCave = Game1.getLocationFromName(Constants.FARM_CAVE_LOCATION_NAME);
             Log($"Player Cave Choice: {Game1.player.caveChoice}");
-            if(Game1.player.caveChoice == 2) {
+            if(Game1.player.caveChoice == new NetInt(2)) {
                 CheckLocationForHarvestableObjects(farmCave);
             } else {
                 ScanLocationForFruit(farmCave);
@@ -56,7 +57,7 @@ namespace StardewNewsFeed {
         }
 
         private void CheckGreenhouse(object sender, DayStartedEventArgs e) {
-            var greenhouse = Game1.locations.SingleOrDefault(l => l.isGreenhouse);
+            var greenhouse = Game1.locations.SingleOrDefault(l => l.isGreenhouse == new NetBool(true));
             CheckLocationForHarvestableTerrain(greenhouse);
         }
 
@@ -87,24 +88,24 @@ namespace StardewNewsFeed {
         }
 
         private void CheckLocationForHarvestableObjects(GameLocation location) {
-            var itemsReadyForHarvest = location.Objects.Values.Where(o => o.readyForHarvest);
+            var numberOfItemsReadyForHarvest = location.Objects.Values.Count(o => o.readyForHarvest == new NetBool(true));
 
-            if (itemsReadyForHarvest.Any()) {
-                Game1.addHUDMessage(new HUDMessage($"There are {itemsReadyForHarvest.Count()} items ready for harvesting in the {location.getDisplayName()}", 2));
-                Log($"{itemsReadyForHarvest.Count()} items found in the {location.getDisplayName()}");
+            if (numberOfItemsReadyForHarvest > 0) {
+                Game1.addHUDMessage(new HUDMessage($"There are {numberOfItemsReadyForHarvest} items ready for harvesting in the {location.getDisplayName()}", 2));
+                Log($"{numberOfItemsReadyForHarvest} items found in the {location.getDisplayName()}");
             } else {
                 Log($"No items found in the {location.getDisplayName()}");
             }
         }
 
         private void CheckLocationForHarvestableTerrain(GameLocation location) {
-            var hoeDirtReadyForHavest = location.terrainFeatures.Pairs
+            var numberOfDirtTilesReadyForHarvest = location.terrainFeatures.Pairs
                 .Where(p => p.Value is HoeDirt)
                 .Select(p => p.Value as HoeDirt)
-                .Where(hd => hd.readyForHarvest());
+                .Count(hd => hd.readyForHarvest());
 
-            if(hoeDirtReadyForHavest.Any()) {
-                Game1.addHUDMessage(new HUDMessage($"There are {hoeDirtReadyForHavest.Count()} items ready for harvest in the {location.getDisplayName()}."));
+            if(numberOfDirtTilesReadyForHarvest > 0) {
+                Game1.addHUDMessage(new HUDMessage($"There are {numberOfDirtTilesReadyForHarvest} items ready for harvest in the {location.getDisplayName()}."));
             } else {
                 Log($"No items found in the {location.getDisplayName()}");
             }
@@ -127,7 +128,7 @@ namespace StardewNewsFeed {
                 return false;
             }
 
-            return tile.readyForHarvest;
+            return tile.readyForHarvest == new NetBool(true);
         }
         #endregion
 
