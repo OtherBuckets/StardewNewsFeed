@@ -1,5 +1,6 @@
 ﻿
 using StardewValley;
+using Netcode;
 
 namespace StardewNewsFeed {
     public static class Extensions {
@@ -9,6 +10,14 @@ namespace StardewNewsFeed {
                 return "Farm Cave";
             }
             return @this.name;
+        }
+
+        public static NetBool tileIsReadyForHarvest(this GameLocation @this, int height, int width) {
+            var objectAtLocation = @this.getObjectAtTile(height, width);
+            if(objectAtLocation == null) {
+                return new NetBool(false);
+            }
+            return objectAtLocation.readyForHarvest;
         }
 
     }
