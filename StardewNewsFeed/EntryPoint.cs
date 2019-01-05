@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System.Linq;
+using Netcode;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -48,7 +49,7 @@ namespace StardewNewsFeed {
         private void CheckFarmCave(object sender, DayStartedEventArgs e) {
             var farmCave = Game1.getLocationFromName(Constants.FARM_CAVE_LOCATION_NAME);
             Log($"Player Cave Choice: {Game1.player.caveChoice}");
-            if(Game1.player.caveChoice == 2) {
+            if(Game1.player.caveChoice == new NetInt(2)) {
                 CheckLocationForHarvestableObjects(farmCave);
             } else {
                 //ScanLocationForFruit(farmCave);
@@ -58,7 +59,7 @@ namespace StardewNewsFeed {
         }
 
         private void CheckGreenhouse(object sender, DayStartedEventArgs e) {
-            var greenhouse = Game1.locations.SingleOrDefault(l => l.isGreenhouse);
+            var greenhouse = Game1.locations.SingleOrDefault(l => l.isGreenhouse == new NetBool(true));
             CheckLocationForHarvestableTerrain(greenhouse);
         }
 
@@ -83,49 +84,64 @@ namespace StardewNewsFeed {
             foreach(var npc in e.NewLocation.getCharacters()) {
                 Log($"Checking {npc.displayName} for a birthday today");
                 if (npc.isBirthday(Game1.Date.Season, Game1.Date.DayOfMonth)) {
-                    Game1.addHUDMessage(new HUDMessage($"Today is {npc.getName()}'s birthday. Don't forget to give them a gift", 2));
+                    var message = Helper.Translation.Get("news-feed.birthday-notice", new { npcName = npc.getName() });
+                    Game1.addHUDMessage(new HUDMessage(message, 2));
                 }
             }
         }
 
         private void CheckLocationForHarvestableObjects(GameLocation location) {
-            var itemsReadyForHarvest = location.Objects.Values.Where(o => o.readyForHarvest);
+            var numberOfItemsReadyForHarvest = location.Objects.Values.Count(o => o.readyForHarvest == new NetBool(true));
 
-            if (itemsReadyForHarvest.Any()) {
-                Game1.addHUDMessage(new HUDMessage($"{itemsReadyForHarvest.Count()} item(s) ready for harvesting in the {location.getDisplayName()}", 2));
-                Log($"{itemsReadyForHarvest.Count()} item(s) found in the {location.getDisplayName()}");
+            if (numberOfItemsReadyForHarvest > 0) {
+                var message = Helper.Translation.Get("news-feed.harvest-items-found-in-location-notice", new {
+                    numberOfItems = numberOfItemsReadyForHarvest,
+                    locationName = location.getDisplayName(Helper.Translation),
+                });
+                Game1.addHUDMessage(new HUDMessage(message, 2));
+                Log($"{numberOfItemsReadyForHarvest} items found in the {location.getDisplayName(Helper.Translation)}");
             } else {
-                Log($"No items found in the {location.getDisplayName()}");
+                Log($"No items found in the {location.getDisplayName(Helper.Translation)}");
             }
         }
 
         private void CheckLocationForHarvestableTerrain(GameLocation location) {
-            var hoeDirtReadyForHavest = location.terrainFeatures.Pairs
+            var numberOfDirtTilesReadyForHarvest = location.terrainFeatures.Pairs
                 .Where(p => p.Value is HoeDirt)
                 .Select(p => p.Value as HoeDirt)
-                .Where(hd => hd.readyForHarvest());
+                .Count(hd => hd.readyForHarvest());
 
-            if(hoeDirtReadyForHavest.Any()) {
-                Game1.addHUDMessage(new HUDMessage($"{hoeDirtReadyForHavest.Count()} item(s) ready for harvest in the {location.getDisplayName()}."));
+            if(numberOfDirtTilesReadyForHarvest > 0) {
+                var message = Helper.Translation.Get("news-feed.harvest-items-found-in-location-notice", new {
+                    numberOfItems = numberOfDirtTilesReadyForHarvest,
+                    locationName = location.getDisplayName(Helper.Translation),
+                });
+                Game1.addHUDMessage(new HUDMessage(message, 2));
             } else {
-                Log($"No items found in the {location.getDisplayName()}");
+                Log($"No items found in the {location.getDisplayName(Helper.Translation)}");
             }
         }
 
-        //private void ScanLocationForFruit(GameLocation location) {
-        //    var tiles = new List<Object>();
-        //    for (int height = 4; height < 9; height++) {
-        //        for (int width = 2; width < 11; width++) {
-        //            if (location.tileIsReadyForHarvest(height, width)) {
-        //                tiles.Add(location.getObjectAtTile(height, width));
-        //            }
-        //        }
-        //    }
-        //    if(tiles.Any()) {
-        //        Game1.addHUDMessage(new HUDMessage($"The bats have brought you {tiles.Count()} pieces of fruit!", 2));
-        //        return;
-        //    }
-        //}
+        private void ScanLocationForFruit(GameLocation location) {
+            for (int height = 4; height < 9; height++) {
+                for (int width = 2; width < 11; width++) {
+                    if (TileIsHarvestable(location, height, width)) {
+                        var message = Helper.Translation.Get("news-feed.bats-dropped-fruit-notice");
+                        Game1.addHUDMessage(new HUDMessage(message, 2));
+                        return;
+                    }
+                }
+            }
+        }
+
+        private bool TileIsHarvestable(GameLocation location, int height, int width) {
+            var tile = location.getObjectAtTile(height, width);
+            if (tile == null) {
+                return false;
+            }
+
+            return tile.readyForHarvest == new NetBool(true);
+        }
         #endregion
 
     }

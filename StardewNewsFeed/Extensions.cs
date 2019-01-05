@@ -1,15 +1,16 @@
 ﻿
+using StardewModdingAPI;
 using StardewValley;
 using Netcode;
 
 namespace StardewNewsFeed {
     public static class Extensions {
 
-        public static string getDisplayName(this GameLocation @this) {
-            if(@this.name == Constants.FARM_CAVE_LOCATION_NAME) {
-                return "Farm Cave";
+        public static string getDisplayName(this GameLocation @this, ITranslationHelper translationHelper) {
+            if(@this.Name == Constants.FARM_CAVE_LOCATION_NAME) {
+                return translationHelper.Get("news-feed.cave-display-name");
             }
-            return @this.name;
+            return @this.Name;
         }
 
         public static NetBool tileIsReadyForHarvest(this GameLocation @this, int height, int width) {
