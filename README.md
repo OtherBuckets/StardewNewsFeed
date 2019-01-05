@@ -35,5 +35,5 @@ By default, scanning for items in the Farm Cave and the Greenhouse will be turne
 |BirthdayCheckEnabled|Enables/Disables roaming birthday checks|true|
 
 ## Plans for additional future updates
-A persistent checklist containing areas with harvestable items
-Translations for all languages supported by the Stardew Valley core game
+A persistent checklist containing areas with harvestable items.
+Translations for all languages supported by the Stardew Valley core game.
