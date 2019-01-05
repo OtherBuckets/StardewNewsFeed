@@ -96,12 +96,12 @@ namespace StardewNewsFeed {
             if (numberOfItemsReadyForHarvest > 0) {
                 var message = Helper.Translation.Get("news-feed.harvest-items-found-in-location-notice", new {
                     numberOfItems = numberOfItemsReadyForHarvest,
-                    locationName = location.getDisplayName(Helper.Translation),
+                    locationName = location.GetDisplayName(Helper.Translation),
                 });
                 Game1.addHUDMessage(new HUDMessage(message, 2));
-                Log($"{numberOfItemsReadyForHarvest} items found in the {location.getDisplayName(Helper.Translation)}");
+                Log($"{numberOfItemsReadyForHarvest} items found in the {location.GetDisplayName(Helper.Translation)}");
             } else {
-                Log($"No items found in the {location.getDisplayName(Helper.Translation)}");
+                Log($"No items found in the {location.GetDisplayName(Helper.Translation)}");
             }
         }
 
@@ -114,33 +114,24 @@ namespace StardewNewsFeed {
             if(numberOfDirtTilesReadyForHarvest > 0) {
                 var message = Helper.Translation.Get("news-feed.harvest-items-found-in-location-notice", new {
                     numberOfItems = numberOfDirtTilesReadyForHarvest,
-                    locationName = location.getDisplayName(Helper.Translation),
+                    locationName = location.GetDisplayName(Helper.Translation),
                 });
                 Game1.addHUDMessage(new HUDMessage(message, 2));
             } else {
-                Log($"No items found in the {location.getDisplayName(Helper.Translation)}");
+                Log($"No items found in the {location.GetDisplayName(Helper.Translation)}");
             }
         }
 
         private void ScanLocationForFruit(GameLocation location) {
             for (int height = 4; height < 9; height++) {
                 for (int width = 2; width < 11; width++) {
-                    if (TileIsHarvestable(location, height, width)) {
+                    if (location.TileIsReadyForHarvest(height, width)) {
                         var message = Helper.Translation.Get("news-feed.bats-dropped-fruit-notice");
                         Game1.addHUDMessage(new HUDMessage(message, 2));
                         return;
                     }
                 }
             }
-        }
-
-        private bool TileIsHarvestable(GameLocation location, int height, int width) {
-            var tile = location.getObjectAtTile(height, width);
-            if (tile == null) {
-                return false;
-            }
-
-            return tile.readyForHarvest == new NetBool(true);
         }
         #endregion
 
