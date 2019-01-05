@@ -12,6 +12,11 @@ https://www.nexusmods.com/stardewvalley/mods/3206/
 * Cellar Notifications
 * Shed Notifications
 
+## Currently Supported Languages (version >= 1.6)
+* English
+* Spanish
+* German
+
 ## Additional Features (version >= 1.5)
 As you move around the world. Each time you move to a new location, it will check all NPC's in your new location for birthdays, and display a notification if one is found.
 
@@ -30,5 +35,5 @@ By default, scanning for items in the Farm Cave and the Greenhouse will be turne
 |BirthdayCheckEnabled|Enables/Disables roaming birthday checks|false|
 
 ## Plans for additional future updates
-Notifications for npc birthdays
 A persistent checklist containing areas with harvestable items
+Translations for all languages supported by the Stardew Valley core game
