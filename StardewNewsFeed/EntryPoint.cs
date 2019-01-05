@@ -4,7 +4,6 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using System.Collections.Generic;
 
 namespace StardewNewsFeed {
     public class EntryPoint : Mod {
@@ -40,15 +39,9 @@ namespace StardewNewsFeed {
         #endregion
 
         #region Private Methods
-        private void Log(string message) {
-            if(_modConfig.DebugMode) {
-                Monitor.Log(message);
-            }
-        }
-
         private void CheckFarmCave(object sender, DayStartedEventArgs e) {
             var farmCave = Game1.getLocationFromName(Constants.FARM_CAVE_LOCATION_NAME);
-            Log($"Player Cave Choice: {Game1.player.caveChoice}");
+            Monitor.VerboseLog($"Player Cave Choice: {Game1.player.caveChoice}");
             if(Game1.player.caveChoice == new NetInt(2)) {
                 CheckLocationForHarvestableObjects(farmCave);
             } else {
@@ -80,9 +73,8 @@ namespace StardewNewsFeed {
         }
 
         private void CheckBirthdays(object sender, WarpedEventArgs e) {
-            Log("Checking for birthdays: ");
             foreach(var npc in e.NewLocation.getCharacters()) {
-                Log($"Checking {npc.displayName} for a birthday today");
+                Monitor.VerboseLog($"Checking {npc.displayName} for a birthday today");
                 if (npc.isBirthday(Game1.Date.Season, Game1.Date.DayOfMonth)) {
                     var message = Helper.Translation.Get("news-feed.birthday-notice", new { npcName = npc.getName() });
                     Game1.addHUDMessage(new HUDMessage(message, 2));
@@ -99,9 +91,9 @@ namespace StardewNewsFeed {
                     locationName = location.GetDisplayName(Helper.Translation),
                 });
                 Game1.addHUDMessage(new HUDMessage(message, 2));
-                Log($"{numberOfItemsReadyForHarvest} items found in the {location.GetDisplayName(Helper.Translation)}");
+                Monitor.VerboseLog($"{numberOfItemsReadyForHarvest} items found in the {location.GetDisplayName(Helper.Translation)}");
             } else {
-                Log($"No items found in the {location.GetDisplayName(Helper.Translation)}");
+                Monitor.VerboseLog($"No items found in the {location.GetDisplayName(Helper.Translation)}");
             }
         }
 
@@ -118,7 +110,7 @@ namespace StardewNewsFeed {
                 });
                 Game1.addHUDMessage(new HUDMessage(message, 2));
             } else {
-                Log($"No items found in the {location.GetDisplayName(Helper.Translation)}");
+                Monitor.VerboseLog($"No items found in the {location.GetDisplayName(Helper.Translation)}");
             }
         }
 
