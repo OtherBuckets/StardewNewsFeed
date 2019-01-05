@@ -82,7 +82,8 @@ namespace StardewNewsFeed {
             foreach(var npc in e.NewLocation.getCharacters()) {
                 Log($"Checking {npc.displayName} for a birthday today");
                 if (npc.isBirthday(Game1.Date.Season, Game1.Date.DayOfMonth)) {
-                    Game1.addHUDMessage(new HUDMessage($"Today is {npc.getName()}'s birthday. Don't forget to give them a gift", 2));
+                    var message = Helper.Translation.Get("news-feed.birthday-notice", new { npcName = npc.getName() });
+                    Game1.addHUDMessage(new HUDMessage(message, 2));
                 }
             }
         }
@@ -91,10 +92,14 @@ namespace StardewNewsFeed {
             var numberOfItemsReadyForHarvest = location.Objects.Values.Count(o => o.readyForHarvest == new NetBool(true));
 
             if (numberOfItemsReadyForHarvest > 0) {
-                Game1.addHUDMessage(new HUDMessage($"There are {numberOfItemsReadyForHarvest} items ready for harvesting in the {location.getDisplayName()}", 2));
-                Log($"{numberOfItemsReadyForHarvest} items found in the {location.getDisplayName()}");
+                var message = Helper.Translation.Get("news-feed.harvest-items-found-in-location-notice", new {
+                    numberOfItems = numberOfItemsReadyForHarvest,
+                    locationName = location.getDisplayName(Helper.Translation),
+                });
+                Game1.addHUDMessage(new HUDMessage(message, 2));
+                Log($"{numberOfItemsReadyForHarvest} items found in the {location.getDisplayName(Helper.Translation)}");
             } else {
-                Log($"No items found in the {location.getDisplayName()}");
+                Log($"No items found in the {location.getDisplayName(Helper.Translation)}");
             }
         }
 
@@ -105,9 +110,13 @@ namespace StardewNewsFeed {
                 .Count(hd => hd.readyForHarvest());
 
             if(numberOfDirtTilesReadyForHarvest > 0) {
-                Game1.addHUDMessage(new HUDMessage($"There are {numberOfDirtTilesReadyForHarvest} items ready for harvest in the {location.getDisplayName()}."));
+                var message = Helper.Translation.Get("news-feed.harvest-items-found-in-location-notice", new {
+                    numberOfItems = numberOfDirtTilesReadyForHarvest,
+                    locationName = location.getDisplayName(Helper.Translation),
+                });
+                Game1.addHUDMessage(new HUDMessage(message, 2));
             } else {
-                Log($"No items found in the {location.getDisplayName()}");
+                Log($"No items found in the {location.getDisplayName(Helper.Translation)}");
             }
         }
 
@@ -115,7 +124,8 @@ namespace StardewNewsFeed {
             for (int height = 4; height < 9; height++) {
                 for (int width = 2; width < 11; width++) {
                     if (TileIsHarvestable(location, height, width)) {
-                        Game1.addHUDMessage(new HUDMessage("The bats have brought you some fruit!", 2));
+                        var message = Helper.Translation.Get("news-feed.bats-dropped-fruit-notice");
+                        Game1.addHUDMessage(new HUDMessage(message, 2));
                         return;
                     }
                 }
