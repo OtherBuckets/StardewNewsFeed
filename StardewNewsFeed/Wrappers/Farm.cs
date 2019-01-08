@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace StardewNewsFeed.Wrappers {
     public class Farm : IFarm {
@@ -15,9 +16,17 @@ namespace StardewNewsFeed.Wrappers {
         public IList<ILocation> GetBuildings<T>(ITranslationHelper translationHelper) {
             var buildings = _farm.buildings
                 .Select(b => b.indoors.Value)
-                .Where(i => i is T);
+                .Where(i => i is T)
+                .ToList();
+
+            foreach(var b in _farm.buildings) {
+                if(b is T) {
+                    buildings.Add(b.indoors.Value);
+                }
+            }
 
             return buildings.Select(b => new Location(b, translationHelper) as ILocation).ToList();
         }
+
     }
 }

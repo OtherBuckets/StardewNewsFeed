@@ -27,14 +27,5 @@ namespace StardewNewsFeed.Services {
 
             return greenhouse;
         }
-
-        public int GetNumberOfHarvestableObjects(ILocation location) {
-            return location.GetObjects().Count(o => o.IsReadyForHarvest());
-        }
-
-        public int GetNumberOfHarvestableTerrainFeatures(ILocation location) {
-            throw new System.NotImplementedException();
-        }
-
     }
 }

@@ -30,15 +30,17 @@ namespace StardewNewsFeed.Wrappers {
             return new StardewObject(_gameLocation.getObjectAtTile(height, width));
         }
 
-        public IList<IStardewObject> GetObjects() {
+        private IList<IStardewObject> GetObjects() {
             return _gameLocation.Objects.Values.Select(o => new StardewObject(o) as IStardewObject).ToList();
         }
 
-        public IList<ITerrainFeature> GetTerrainFeatures() {
-
-            // TODO Implementation
-
-            return new List<ITerrainFeature>();
+        private IList<ITerrainFeature> GetTerrainFeatures<T>() where T : StardewValley.TerrainFeatures.TerrainFeature {
+            return _gameLocation.terrainFeatures
+                .Pairs
+                .Where(p => p.Value is T)
+                .Select(p => p.Value as T)
+                .Select(tf => new TerrainFeature(new StardewObject(tf)) as ITerrainFeature)
+                .ToList();
         }
 
         public bool IsGreenhouse() {
@@ -46,8 +48,16 @@ namespace StardewNewsFeed.Wrappers {
         }
 
         public IList<NPC> GetCharacters() {
-            var npcs = _gameLocation.getCharacters().Select(c => new NPC(c)).ToList();
+            var npcs = _gameLocation.getCharacters().Where(c => c.isVillager()).Select(c => new NPC(c)).ToList();
             return npcs;
+        }
+
+        public int GetNumberOfHarvestableObjects() {
+            return GetObjects().Count(o => o.IsReadyForHarvest());
+        }
+
+        public int GetNumberOfHarvestableTerrainFeatures<T>() where T : StardewValley.TerrainFeatures.TerrainFeature {
+            return GetTerrainFeatures<T>().Count(tf => tf.IsReadyForHarvest());
         }
 
     }

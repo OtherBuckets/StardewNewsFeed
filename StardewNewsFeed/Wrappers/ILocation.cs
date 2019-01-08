@@ -8,11 +8,12 @@ namespace StardewNewsFeed.Wrappers {
 
         string GetDisplayName();
         string GetLocationName();
-        IList<IStardewObject> GetObjects();
+        //IList<IStardewObject> GetObjects();
         IStardewObject GetObjectAtTile(int height, int width);
-        IList<ITerrainFeature> GetTerrainFeatures();
+        //IList<ITerrainFeature> GetTerrainFeatures<T>() where T : StardewValley.TerrainFeatures.TerrainFeature;
         bool IsGreenhouse();
         IList<NPC> GetCharacters();
-
+        int GetNumberOfHarvestableObjects();
+        int GetNumberOfHarvestableTerrainFeatures<T>() where T : StardewValley.TerrainFeatures.TerrainFeature;
     }
 }
