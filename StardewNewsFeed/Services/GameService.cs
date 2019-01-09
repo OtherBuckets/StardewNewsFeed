@@ -2,6 +2,7 @@
 using StardewNewsFeed.Wrappers;
 using StardewNewsFeed.Enums;
 using StardewValley;
+using StardewValley.TerrainFeatures;
 
 namespace StardewNewsFeed.Services {
     public class GameService : IGameService {
@@ -23,18 +24,17 @@ namespace StardewNewsFeed.Services {
             var farmCave = _locationService.GetLocationByName(Constants.FARM_CAVE_LOCATION_NAME);
 
             switch(_game.GetFarmCaveChoice()) {
-                case FarmCaveChoice.Mushrooms:
-                    CheckLocationForHarvestableObjects(farmCave);
+                case FarmCaveChoice.None:
                     break;
-                case FarmCaveChoice.FruitBats:
-                    CheckLocationForHarvestableTerrain(farmCave);
+                default:
+                    CheckLocationForHarvestableObjects(farmCave);
                     break;
             }
         }
 
         public void CheckGreenhouse() {
             var greenhouse = _locationService.GetGreenhouse();
-            CheckLocationForHarvestableTerrain(greenhouse);
+            CheckLocationForHarvestableTerrain<HoeDirt>(greenhouse);
         }
 
         public void CheckCellar() {
@@ -42,16 +42,20 @@ namespace StardewNewsFeed.Services {
             CheckLocationForHarvestableObjects(cellar);
         }
 
-        /// <summary>
-        /// Maybe change this to public void CheckBuildings<T>()
-        /// Then use it for Sheds, Barns, and Coops
-        /// </summary>
-        public void CheckSheds() {
+        public void CheckShed() {
             var farm = GetFarm();
-            var sheds = farm.GetBuildings<Shed>(_translationHelper);
+            var buildings = farm.GetBuildings<Shed>(_translationHelper);
+            foreach (var building in buildings) {
+                CheckLocationForHarvestableObjects(building);
+            }
+        }
 
-            foreach (var shed in sheds) {
-                CheckLocationForHarvestableObjects(shed);
+        public void CheckFarmBuildings<T>() where T : StardewValley.Buildings.Building {
+            var farm = GetFarm();
+            var buildings = farm.GetBuildings<T>(_translationHelper);
+            _monitor.Log($"Found {buildings.Count} {typeof(T)}(s)");
+            foreach(var building in buildings) {
+                CheckLocationForHarvestableObjects(building);
             }
         }
 
@@ -70,16 +74,12 @@ namespace StardewNewsFeed.Services {
             _game.DisplayMessage(hudMessage);
         }
 
-        private bool PlayerChoseMushrooms() {
-            return _game.GetFarmCaveChoice() == FarmCaveChoice.Mushrooms;
-        }
-
         private IFarm GetFarm() {
             return _game.GetFarm();
         }
 
         private void CheckLocationForHarvestableObjects(ILocation location) {
-            var numberOfItemsReadyForHarvest = _locationService.GetNumberOfHarvestableObjects(location);
+            var numberOfItemsReadyForHarvest = location.GetNumberOfHarvestableObjects();
             if (numberOfItemsReadyForHarvest > 0) {
                 var message = _translationHelper.Get("news-feed.harvest-items-found-in-location-notice", new {
                     numberOfItems = numberOfItemsReadyForHarvest,
@@ -89,8 +89,8 @@ namespace StardewNewsFeed.Services {
             }
         }
 
-        private void CheckLocationForHarvestableTerrain(ILocation location) {
-            var numberOfItemsReadyForHarvest = _locationService.GetNumberOfHarvestableTerrainFeatures(location);
+        private void CheckLocationForHarvestableTerrain<T>(ILocation location) where T : StardewValley.TerrainFeatures.TerrainFeature {
+            var numberOfItemsReadyForHarvest = location.GetNumberOfHarvestableTerrainFeatures<T>();
             if (numberOfItemsReadyForHarvest > 0) {
                 var message = _translationHelper.Get("news-feed.harvest-items-found-in-location-notice", new {
                     numberOfItems = numberOfItemsReadyForHarvest,

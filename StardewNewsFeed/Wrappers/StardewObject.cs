@@ -16,7 +16,8 @@ namespace StardewNewsFeed.Wrappers {
         }
 
         public bool IsReadyForHarvest() {
-            return _object.readyForHarvest == new NetBool(true);
+            return (_object.readyForHarvest == new NetBool(true))
+                || _object.isAnimalProduct(); // animal products laying around are always ready for harvest
         }
     }
 }

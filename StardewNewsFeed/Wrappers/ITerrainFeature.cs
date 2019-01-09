@@ -4,5 +4,6 @@ namespace StardewNewsFeed.Wrappers {
     /// Wrapper for StardewValley.TerrainFeature
     /// </summary>
     public interface ITerrainFeature {
+        bool IsReadyForHarvest();
     }
 }

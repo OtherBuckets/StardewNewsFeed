@@ -34,7 +34,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="ModConfig.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Wrappers\Location.cs" />
     <Compile Include="Wrappers\ILocation.cs" />
@@ -58,6 +57,7 @@
     <Compile Include="Wrappers\NPC.cs" />
     <Compile Include="Wrappers\GameDate.cs" />
     <Compile Include="Enums\Season.cs" />
+    <Compile Include="Wrappers\TerrainFeature.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />

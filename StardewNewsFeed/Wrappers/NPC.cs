@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using StardewNPC = StardewValley.NPC;
 namespace StardewNewsFeed.Wrappers {
     public class NPC {
@@ -19,8 +19,9 @@ namespace StardewNewsFeed.Wrappers {
             return date.Equals(_birthday);
         }
 
-        public GameDate WhenIsMyBirthday() {
-            return _birthday;
+        public string GetGiftSuggestion() {
+            // TODO Implement
+            return "Money";
         }
     }
 }
