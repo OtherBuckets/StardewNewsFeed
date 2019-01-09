@@ -22,10 +22,13 @@ namespace StardewNewsFeed.Services {
         public void CheckFarmCave() {
             var farmCave = _locationService.GetLocationByName(Constants.FARM_CAVE_LOCATION_NAME);
 
-            if (PlayerChoseMushrooms()) {
-                CheckLocationForHarvestableObjects(farmCave);
-            } else {
-                CheckLocationForHarvestableTerrain(farmCave);
+            switch(_game.GetFarmCaveChoice()) {
+                case FarmCaveChoice.Mushrooms:
+                    CheckLocationForHarvestableObjects(farmCave);
+                    break;
+                case FarmCaveChoice.FruitBats:
+                    CheckLocationForHarvestableTerrain(farmCave);
+                    break;
             }
         }
 
