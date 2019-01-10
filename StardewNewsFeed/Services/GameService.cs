@@ -77,7 +77,7 @@ namespace StardewNewsFeed.Services {
             var piecesOfHay = farm.piecesOfHay;
             var percentOfMax = piecesOfHay / maxCapacity;
 
-            if(percentOfMax < 0.25) {
+            if(percentOfMax < 0.15) {
                 var message = _translationHelper.Get("news-feed.silo-low-notice", new { piecesOfHay, maxCapacity });
                 DisplayMessage(new HudMessage(message, HudMessageType.NewQuest));
             }
