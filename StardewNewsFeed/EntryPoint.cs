@@ -30,11 +30,12 @@ namespace StardewNewsFeed {
             }
 
             if (_modConfig.CoopCheckEnabled) {
-                helper.Events.GameLoop.DayStarted += (s, e) => _gameService.CheckFarmBuildings<Coop>();
+                helper.Events.GameLoop.DayStarted += (s, e) => _gameService.CheckFarmBuildingsForHarvastableItems<Coop>();
             }
 
             if (_modConfig.BarnCheckEnabled) {
-                helper.Events.GameLoop.DayStarted += (s, e) => _gameService.CheckFarmBuildings<Barn>();
+                helper.Events.GameLoop.DayStarted += (s, e) => _gameService.CheckBarnForAnimalProducts();
+                helper.Events.GameLoop.DayStarted += (s, e) => _gameService.CheckFarmBuildingsForHarvastableItems<Barn>();
             }
 
             if (_modConfig.BirthdayCheckEnabled) {
