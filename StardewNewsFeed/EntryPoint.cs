@@ -40,6 +40,10 @@ namespace StardewNewsFeed {
             if (_modConfig.BirthdayCheckEnabled) {
                 helper.Events.Player.Warped += (s, e) => _gameService.CheckLocationForBirthdays(new Location(e.NewLocation, Helper.Translation));
             }
+
+            if(_modConfig.SiloCheckEnabled) {
+                helper.Events.GameLoop.DayStarted += (s, e) => _gameService.CheckSilos();
+            }
         }
     }
 }
