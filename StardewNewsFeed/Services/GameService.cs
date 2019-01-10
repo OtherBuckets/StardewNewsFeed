@@ -1,9 +1,8 @@
-﻿using StardewModdingAPI;
+using StardewModdingAPI;
 using StardewNewsFeed.Wrappers;
 using StardewNewsFeed.Enums;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using StardewValley.Buildings;
 using System.Linq;
 
 namespace StardewNewsFeed.Services {
@@ -52,9 +51,33 @@ namespace StardewNewsFeed.Services {
             }
         }
 
-        public void CheckFarmBuildings<T>() where T : StardewValley.Buildings.Building {
+        public void CheckBarnForAnimalProducts() {
+            var groupsOfAnimalsPerBarn = GetFarm().BarnAnimalsWithAvailableProduce
+                .GroupBy(_ => _.home.nameOfIndoorsWithoutUnique);
+
+            foreach (var groupOfAnimalsInBarn in groupsOfAnimalsPerBarn) {
+                DisplayMessage( MakeAnimalProduceHudMessage(groupOfAnimalsInBarn));    
+            }
+        }
+
+        private HudMessage MakeAnimalProduceHudMessage(IGrouping<string, FarmAnimal> groupOfAnimalsInBarn) {
+            var toolsNeededForProduce = groupOfAnimalsInBarn
+                .Select(_ => _.toolUsedForHarvest.Value)
+                .Distinct()
+                .OrderBy(_ => _);
+            
+            var translationSuffix = groupOfAnimalsInBarn.Count() > 1 ? "plural" : "singular";
+            var message = _translationHelper.Get($"news-feed.harvest-animals-found-in-location-notice.{translationSuffix}", new {
+                numberOfItems = groupOfAnimalsInBarn.Count(),
+                locationName = groupOfAnimalsInBarn.Key,
+                toolsNeededForProduce = string.Join(", ", toolsNeededForProduce),
+            });
+            return new HudMessage(message, HudMessageType.NewQuest); 
+        }
+        
+        public void CheckFarmBuildingsForHarvastableItems<T>() where T : StardewValley.Buildings.Building {
             var farm = GetFarm();
-            var buildings = farm.GetBuildings<T>(_translationHelper);
+            var buildings = farm.GetBuildings<T>(_translationHelper).ToList();
             _monitor.Log($"Found {buildings.Count} {typeof(T)}(s)");
             foreach(var building in buildings) {
                 CheckLocationForHarvestableObjects(building);
