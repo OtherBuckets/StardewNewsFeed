@@ -73,7 +73,13 @@ namespace StardewNewsFeed.Services {
         public void CheckSilos() {
             var farm = Game1.getFarm();
             var silos = farm.buildings.Where(b => b.buildingType == new Netcode.NetString("Silo"));
-            var maxCapacity = silos.Count() * 240.0;
+            var siloCount = silos.Count();
+
+            if(siloCount == 0) {
+                return;
+            }
+
+            var maxCapacity = siloCount * 240.0;
             var piecesOfHay = farm.piecesOfHay;
             var percentOfMax = piecesOfHay / maxCapacity;
 
