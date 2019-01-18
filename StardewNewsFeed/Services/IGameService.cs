@@ -8,5 +8,6 @@ namespace StardewNewsFeed.Services {
         void CheckShed();
         void CheckLocationForBirthdays(ILocation location);
         void CheckFarmBuildings<T>() where T : StardewValley.Buildings.Building;
+        void CheckSilos();
     }
 }

@@ -3,6 +3,8 @@ using StardewNewsFeed.Wrappers;
 using StardewNewsFeed.Enums;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using StardewValley.Buildings;
+using System.Linq;
 
 namespace StardewNewsFeed.Services {
     public class GameService : IGameService {
@@ -65,6 +67,25 @@ namespace StardewNewsFeed.Services {
                     var message = _translationHelper.Get("news-feed.birthday-notice", new { npcName = npc.GetName() });
                     DisplayMessage(new HudMessage(message, HudMessageType.NewQuest));
                 }
+            }
+        }
+
+        public void CheckSilos() {
+            var farm = Game1.getFarm();
+            var silos = farm.buildings.Where(b => b.buildingType == new Netcode.NetString("Silo"));
+            var siloCount = silos.Count();
+
+            if(siloCount == 0) {
+                return;
+            }
+
+            var maxCapacity = siloCount * 240.0;
+            var piecesOfHay = farm.piecesOfHay;
+            var percentOfMax = piecesOfHay / maxCapacity;
+
+            if(percentOfMax < 0.15) {
+                var message = _translationHelper.Get("news-feed.silo-low-notice", new { piecesOfHay, maxCapacity });
+                DisplayMessage(new HudMessage(message, HudMessageType.NewQuest));
             }
         }
         #endregion
