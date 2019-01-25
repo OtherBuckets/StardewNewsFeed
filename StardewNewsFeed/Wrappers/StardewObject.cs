@@ -24,7 +24,7 @@ namespace StardewNewsFeed.Wrappers {
             }
 
             if (!(_object is Object)) {
-                throw new ArgumentException($"{nameof(_object)} is not a valid StardewValley.Object");
+                throw new ArgumentException($"{_object.GetType()} is not a valid StardewValley.Object");
             }
 
             var stardewObject = (Object) _object;
