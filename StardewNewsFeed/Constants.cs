@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 namespace StardewNewsFeed {
     public static class Constants {
 
