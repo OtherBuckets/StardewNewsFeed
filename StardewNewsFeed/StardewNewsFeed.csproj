@@ -71,6 +71,7 @@
     <None Include="i18n\ru.json" />
     <None Include="i18n\fr.json" />
     <None Include="i18n\ko.json" />
+    <None Include=".travis.yml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="i18n\default.json" />
