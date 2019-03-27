@@ -1,10 +1,9 @@
 ﻿language: csharp
-solution: ./StardewNewsFeed/StardewNewsFeed.sln
+solution: StardewNewsFeed.sln
 install:
-    - nuget restore ./StardewNewsFeed/StardewNewsFeed.sln
-    - xbuild ./StardewNewsFeed/StardewNewsFeed.sln
+    - nuget restore StardewNewsFeed.sln
+    - xbuild StardewNewsFeed.sln
 mono:
-    - 5.16.1
     - latest
 branches:
     only:
