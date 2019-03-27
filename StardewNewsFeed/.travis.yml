@@ -1,9 +1,0 @@
-﻿language: csharp
-solution: StardewNewsFeed.sln
-mono:
-    - latest
-    - 5.16.1
-branches:
-    only:
-    - master
-    - develop
