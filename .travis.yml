@@ -1,1 +1,10 @@
-﻿
+﻿language: csharp
+solution: "./StardewNewsFeed/StardewNewsFeed.sln"
+install:
+    - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./StardewNewsFeed/StardewNewsFeed.sln
+mono:
+    - 5.16.1
+branches:
+    only:
+    - master
+    - develop
