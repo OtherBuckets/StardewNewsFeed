@@ -1,0 +1,6 @@
+{
+    "news-feed.birthday-notice": " {{npcName}} празднует день рождения. Не забудьте подарить подарок!",
+    "news-feed.harvest-items-found-in-location-notice": "{{numberOfItems}} предмет(ов) готово к сборке в {{locationName}}!",
+    "news-feed.bats-dropped-fruit-notice": "Летучие мыши принесли несколько фруктов!",
+    "news-feed.cave-display-name": "Пещера на ферме"
+}
